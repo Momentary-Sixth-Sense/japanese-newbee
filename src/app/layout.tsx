@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "일본어 문자 퀴즈 - 히라가나 & 가타카나",
-  description: "히라가나 가타카나 외울떄까지 반복해서 퀴즈를 풀어보세요",
+  description: "히라가나 가타카나 외울 때 까지 반복해서 퀴즈를 풀어보세요",
 };
 
 export default function RootLayout({
