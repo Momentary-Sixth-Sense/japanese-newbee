@@ -64,18 +64,40 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [shuffledQuestions, setShuffledQuestions] = useState<typeof hiraganaData>([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
+  const [wrongQuestions, setWrongQuestions] = useState<typeof hiraganaData>([]);
+  const [isRetryRound, setIsRetryRound] = useState(false);
+  const [roundNumber, setRoundNumber] = useState(1);
 
   // 문제 섞기
-  const shuffleQuestions = () => {
-    const shuffled = [...hiraganaData].sort(() => Math.random() - 0.5);
+  const shuffleQuestions = (questions: typeof hiraganaData = hiraganaData) => {
+    const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
     setCurrentQuestion(0);
+    setWrongQuestions([]);
+  };
+
+  // 새 라운드 시작
+  const startNewRound = () => {
     setScore(0);
     setTotalQuestions(0);
+    setIsRetryRound(false);
+    setRoundNumber(1);
+    shuffleQuestions();
+  };
+
+  // 틀린 문제들로 재시도 라운드 시작
+  const startRetryRound = () => {
+    if (wrongQuestions.length > 0) {
+      setIsRetryRound(true);
+      setRoundNumber(roundNumber + 1);
+      shuffleQuestions(wrongQuestions);
+      setScore(0);
+      setTotalQuestions(0);
+    }
   };
 
   useEffect(() => {
-    shuffleQuestions();
+    startNewRound();
   }, []);
 
   const currentHiragana = shuffledQuestions[currentQuestion];
@@ -90,6 +112,12 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
     
     if (correct) {
       setScore(score + 1);
+    } else {
+      // 틀린 문제를 wrongQuestions에 추가 (중복 제거)
+      const isAlreadyWrong = wrongQuestions.some(q => q.hiragana === currentHiragana.hiragana);
+      if (!isAlreadyWrong) {
+        setWrongQuestions([...wrongQuestions, currentHiragana]);
+      }
     }
     
     setTotalQuestions(totalQuestions + 1);
@@ -100,9 +128,29 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
       setIsCorrect(null);
       setUserAnswer('');
       
-      // 다음 문제로 이동 (마지막 문제면 다시 섞기)
+      // 다음 문제로 이동
       if (currentQuestion + 1 >= shuffledQuestions.length) {
-        shuffleQuestions();
+        // 라운드 완료
+        if (wrongQuestions.length > 0 || (!correct && !wrongQuestions.some(q => q.hiragana === currentHiragana.hiragana))) {
+          // 틀린 문제가 있으면 재시도 라운드
+          const finalWrongQuestions = correct ? wrongQuestions : 
+            wrongQuestions.some(q => q.hiragana === currentHiragana.hiragana) ? wrongQuestions : 
+            [...wrongQuestions, currentHiragana];
+          
+          setTimeout(() => {
+            setWrongQuestions(finalWrongQuestions);
+            if (finalWrongQuestions.length > 0) {
+              startRetryRound();
+            } else {
+              startNewRound();
+            }
+          }, 1000);
+        } else {
+          // 모든 문제를 맞췄으면 새 라운드
+          setTimeout(() => {
+            startNewRound();
+          }, 1000);
+        }
       } else {
         setCurrentQuestion(currentQuestion + 1);
       }
@@ -136,6 +184,27 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
             </span>
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
               {score}/{totalQuestions}
+            </span>
+          </div>
+        </div>
+
+        {/* 라운드 정보 */}
+        <div className="text-center mb-4">
+          <div className="flex justify-center items-center gap-2">
+            <span className="text-sm text-gray-600">
+              {isRetryRound ? (
+                <span className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  재도전 라운드 {roundNumber} 
+                  <span className="text-orange-600 text-xs">({shuffledQuestions.length}문제)</span>
+                </span>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  라운드 {roundNumber}
+                  <span className="text-green-600 text-xs">(전체 46문제)</span>
+                </span>
+              )}
             </span>
           </div>
         </div>
@@ -191,6 +260,9 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
                       <p className="text-sm mt-2">
                         정답: <span className="font-semibold">{currentHiragana.pronunciation}</span>
                       </p>
+                      <p className="text-xs text-orange-600 mt-1">
+                        💡 이 문제는 다음 라운드에서 다시 나옵니다
+                      </p>
                     </div>
                   )}
                 </div>
@@ -209,10 +281,23 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
-              className="bg-gradient-to-r from-pink-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+              className={`h-2 rounded-full transition-all duration-300 ${
+                isRetryRound 
+                  ? 'bg-gradient-to-r from-orange-500 to-red-500' 
+                  : 'bg-gradient-to-r from-pink-500 to-blue-500'
+              }`}
               style={{ width: `${((currentQuestion + 1) / shuffledQuestions.length) * 100}%` }}
             />
           </div>
+          
+          {/* 틀린 문제 수 표시 */}
+          {wrongQuestions.length > 0 && !isRetryRound && (
+            <div className="mt-2 text-center">
+              <span className="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                틀린 문제: {wrongQuestions.length}개 (다음 라운드에서 재도전)
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
