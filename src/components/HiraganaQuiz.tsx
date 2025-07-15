@@ -164,7 +164,7 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 p-4 overflow-x-hidden">
       <div className="max-w-md mx-auto">
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-6">

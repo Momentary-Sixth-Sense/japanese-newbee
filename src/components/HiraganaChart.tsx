@@ -89,7 +89,7 @@ const hiraganaChart = [
 
 export const HiraganaChart: React.FC<HiraganaChartProps> = ({ onGoBack }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 p-4 overflow-x-hidden">
       <div className="max-w-lg mx-auto">
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-6">

@@ -16,7 +16,7 @@ export const MenuScreen: React.FC<MenuScreenProps> = ({
   onGoBack 
 }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-teal-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-teal-50 p-4 overflow-x-hidden">
       <div className="max-w-md mx-auto w-full">
         {/* 헤더 */}
         <div className="flex items-center mb-6">

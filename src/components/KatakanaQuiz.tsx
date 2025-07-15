@@ -164,7 +164,7 @@ export const KatakanaQuiz: React.FC<KatakanaQuizProps> = ({ onGoHome }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 p-4 overflow-x-hidden">
       <div className="max-w-md mx-auto">
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-6">

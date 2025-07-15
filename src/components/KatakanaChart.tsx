@@ -89,7 +89,7 @@ const katakanaChart = [
 
 export const KatakanaChart: React.FC<KatakanaChartProps> = ({ onGoBack }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 p-4 overflow-x-hidden">
       <div className="max-w-lg mx-auto">
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-6">
