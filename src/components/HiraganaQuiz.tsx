@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 
-// 히라가나 데이터 (기본 46문자)
-const hiraganaData = [
+// 기본 히라가나 데이터 (선택되지 않았을 때 사용)
+const defaultHiraganaData = [
   { hiragana: 'あ', pronunciation: '아' },
   { hiragana: 'い', pronunciation: '이' },
   { hiragana: 'う', pronunciation: '우' },
@@ -54,22 +54,26 @@ const hiraganaData = [
 
 interface HiraganaQuizProps {
   onGoHome: () => void;
+  selectedCharacters?: Array<{hiragana: string, pronunciation: string}>;
 }
 
-export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
+export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome, selectedCharacters }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswer, setUserAnswer] = useState('');
   const [score, setScore] = useState(0);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
-  const [shuffledQuestions, setShuffledQuestions] = useState<typeof hiraganaData>([]);
+  const [shuffledQuestions, setShuffledQuestions] = useState<typeof defaultHiraganaData>([]);
   const [totalQuestions, setTotalQuestions] = useState(0);
-  const [wrongQuestions, setWrongQuestions] = useState<typeof hiraganaData>([]);
+  const [wrongQuestions, setWrongQuestions] = useState<typeof defaultHiraganaData>([]);
   const [isRetryRound, setIsRetryRound] = useState(false);
   const [roundNumber, setRoundNumber] = useState(1);
 
+  // 사용할 히라가나 데이터 결정
+  const hiraganaData = selectedCharacters || defaultHiraganaData;
+
   // 문제 섞기
-  const shuffleQuestions = (questions: typeof hiraganaData = hiraganaData) => {
+  const shuffleQuestions = (questions: typeof defaultHiraganaData = hiraganaData) => {
     const shuffled = [...questions].sort(() => Math.random() - 0.5);
     setShuffledQuestions(shuffled);
     setCurrentQuestion(0);
@@ -98,7 +102,7 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
 
   useEffect(() => {
     startNewRound();
-  }, []);
+  }, [selectedCharacters]);
 
   const currentHiragana = shuffledQuestions[currentQuestion];
 
@@ -164,7 +168,7 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 p-4 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-blue-50 p-4">
       <div className="max-w-md mx-auto">
         {/* 헤더 */}
         <div className="flex justify-between items-center mb-6">
@@ -188,6 +192,15 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
           </div>
         </div>
 
+        {/* 선택된 문자 수 표시 */}
+        {selectedCharacters && (
+          <div className="text-center mb-4">
+            <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm">
+              선택된 문자: {hiraganaData.length}개
+            </span>
+          </div>
+        )}
+
         {/* 라운드 정보 */}
         <div className="text-center mb-4">
           <div className="flex justify-center items-center gap-2">
@@ -202,7 +215,7 @@ export const HiraganaQuiz: React.FC<HiraganaQuizProps> = ({ onGoHome }) => {
                 <span className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   라운드 {roundNumber}
-                  <span className="text-green-600 text-xs">(전체 46문제)</span>
+                  <span className="text-green-600 text-xs">({hiraganaData.length}문제)</span>
                 </span>
               )}
             </span>

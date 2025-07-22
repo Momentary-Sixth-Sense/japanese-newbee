@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 
 interface StartScreenProps {
@@ -6,7 +8,7 @@ interface StartScreenProps {
 
 export const StartScreen: React.FC<StartScreenProps> = ({ onStartApp }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-teal-50 p-4 flex items-center justify-center overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-teal-50 p-4 flex items-center justify-center">
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-lg shadow-lg border border-gray-200 text-center">
           <div className="p-6">
