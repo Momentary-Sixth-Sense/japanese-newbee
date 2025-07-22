@@ -9,8 +9,10 @@ import { HiraganaQuiz } from '@/components/HiraganaQuiz';
 import { KatakanaQuiz } from '@/components/KatakanaQuiz';
 import { HiraganaChart } from '@/components/HiraganaChart';
 import { KatakanaChart } from '@/components/KatakanaChart';
+import { HiraganaWordQuiz } from '@/components/HiraganaWordQuiz';
+import { HiraganaWordChart } from '@/components/HiraganaWordChart';
 
-type GameState = 'start' | 'menu' | 'hiraganaSelection' | 'katakanaSelection' | 'hiragana' | 'katakana' | 'hiraganaChart' | 'katakanaChart';
+type GameState = 'start' | 'menu' | 'hiraganaSelection' | 'katakanaSelection' | 'hiragana' | 'katakana' | 'hiraganaChart' | 'katakanaChart' | 'hiraganaWord' | 'hiraganaWordChart';
 
 function App() {
   const [gameState, setGameState] = useState<GameState>('start');
@@ -27,6 +29,10 @@ function App() {
 
   const handleSelectKatakana = () => {
     setGameState('katakanaSelection');
+  };
+
+  const handleSelectHiraganaWord = () => {
+    setGameState('hiraganaWord');
   };
 
   const handleStartHiraganaQuiz = (characters: Array<{hiragana: string, pronunciation: string}>) => {
@@ -47,6 +53,10 @@ function App() {
     setGameState('katakanaChart');
   };
 
+  const handleViewHiraganaWordChart = () => {
+    setGameState('hiraganaWordChart');
+  };
+
   const handleGoToMenu = () => {
     setGameState('menu');
   };
@@ -64,8 +74,10 @@ function App() {
         <MenuScreen 
           onSelectHiragana={handleSelectHiragana}
           onSelectKatakana={handleSelectKatakana}
+          onSelectHiraganaWord={handleSelectHiraganaWord}
           onViewHiraganaChart={handleViewHiraganaChart}
           onViewKatakanaChart={handleViewKatakanaChart}
+          onViewHiraganaWordChart={handleViewHiraganaWordChart}
           onGoBack={handleGoToStart}
         />
       )}
@@ -93,11 +105,17 @@ function App() {
           onGoHome={handleGoToMenu} 
         />
       )}
+      {gameState === 'hiraganaWord' && (
+        <HiraganaWordQuiz onGoHome={handleGoToMenu} />
+      )}
       {gameState === 'hiraganaChart' && (
         <HiraganaChart onGoBack={handleGoToMenu} />
       )}
       {gameState === 'katakanaChart' && (
         <KatakanaChart onGoBack={handleGoToMenu} />
+      )}
+      {gameState === 'hiraganaWordChart' && (
+        <HiraganaWordChart onGoBack={handleGoToMenu} />
       )}
     </div>
   );
