@@ -6,9 +6,11 @@ interface MenuScreenProps {
   onSelectHiragana: () => void;
   onSelectKatakana: () => void;
   onSelectHiraganaWord: () => void;
+  onSelectAirportHiraganaWord: () => void;
   onViewHiraganaChart: () => void;
   onViewKatakanaChart: () => void;
   onViewHiraganaWordChart: () => void;
+  onViewAirportHiraganaWordChart: () => void;
   onGoBack: () => void;
 }
 
@@ -16,9 +18,11 @@ export const MenuScreen: React.FC<MenuScreenProps> = ({
   onSelectHiragana, 
   onSelectKatakana, 
   onSelectHiraganaWord,
+  onSelectAirportHiraganaWord,
   onViewHiraganaChart, 
   onViewKatakanaChart,
   onViewHiraganaWordChart,
+  onViewAirportHiraganaWordChart,
   onGoBack 
 }) => {
   return (
@@ -98,6 +102,27 @@ export const MenuScreen: React.FC<MenuScreenProps> = ({
               </div>
             </button>
 
+            {/* 공항 히라가나 단어 퀴즈 */}
+            <button
+              onClick={onSelectAirportHiraganaWord}
+              className="w-full p-4 bg-white rounded-lg shadow-md border-2 border-blue-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <span className="text-lg text-blue-600">✈️</span>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-gray-800">공항 히라가나</h3>
+                    <p className="text-sm text-gray-600">공항 단어 뜻 맞추기 (100문제)</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
+
             {/* 가타카나 문자 퀴즈 */}
             <button
               onClick={onSelectKatakana}
@@ -163,6 +188,27 @@ export const MenuScreen: React.FC<MenuScreenProps> = ({
                   <div className="text-left">
                     <h3 className="font-semibold text-gray-800">히라가나 단어표</h3>
                     <p className="text-sm text-gray-600">기초 단어 40개</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </button>
+
+            {/* 공항 히라가나 단어 차트 */}
+            <button
+              onClick={onViewAirportHiraganaWordChart}
+              className="w-full p-4 bg-white rounded-lg shadow-md border border-gray-200 hover:border-blue-200 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <span className="text-lg text-blue-500">🛂</span>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold text-gray-800">공항 단어표</h3>
+                    <p className="text-sm text-gray-600">공항 단어 100개</p>
                   </div>
                 </div>
                 <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
